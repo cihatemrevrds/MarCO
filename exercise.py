@@ -55,6 +55,7 @@ while True:
                 #cv.imshow('blurred', blurredFrame)
                 #cv.imshow('canny', cannyFrame)
                 cv.imshow('Monitor', frame)
+                time.sleep(0.05)
         if cv.waitKey(1) & 0xFF == ord('d'):
             break
     except Exception as e:
