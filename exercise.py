@@ -40,21 +40,21 @@ while True:
         grayFrame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
         blurredFrame = cv.medianBlur(grayFrame, 5)
         cannyFrame = cv.Canny(blurredFrame, 120, 150)
-        contours, _ = cv.findContours(cannyFrame, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+        contours, _ = cv.findContours(cannyFrame, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         for contour in contours:
             area = cv.contourArea(contour)
             if area > 1000:
-                approx = cv.approxPolyDP(contour, 0.01*cv.arcLength(contour, True), True)
+                approx = cv.approxPolyDP(contour, 0.02*cv.arcLength(contour, True), True)
                 cornerCount = len(approx)
                 if cornerCount == 4:
                     x, y, w, h = cv.boundingRect(contour)
                     cv.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
                     cv.putText(frame, 'Target', (x, y-10), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-                cv.drawContours(frame, contour, -1, (0, 255, 0), 3)
+                #cv.drawContours(frame, contour, -1, (0, 255, 0), 3)
                 #cv.imshow('gray', grayFrame)
                 #cv.imshow('blurred', blurredFrame)
                 #cv.imshow('canny', cannyFrame)
-                cv.imshow('Contours', frame)
+                cv.imshow('Monitor', frame)
         if cv.waitKey(1) & 0xFF == ord('d'):
             break
     except Exception as e:
