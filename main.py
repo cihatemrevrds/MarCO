@@ -1,7 +1,7 @@
 import cv2 as cv
 import time
 from video_stream import VideoStream
-from detector import detect_colored_squares
+from detector import detect_colored_squares, get_center_red_square, get_center_blue_square
 
 def main():
     video_stream = VideoStream(1)
