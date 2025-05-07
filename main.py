@@ -4,7 +4,7 @@ from video_stream import VideoStream
 from detector import detect_colored_squares
 
 def main():
-    video_stream = VideoStream(0)
+    video_stream = VideoStream(1)
     time.sleep(2)
 
     try:
