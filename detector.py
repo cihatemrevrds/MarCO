@@ -3,6 +3,8 @@ import numpy as np
 
 # Constants
 MIN_CONTOUR_AREA = 1000
+last_red_center = None
+last_blue_center = None
 
 # Kırmızı renk HSV aralıkları (iki ayrı bölge)
 RED_LOWER_1 = np.array([0, 100, 50])
@@ -38,6 +40,7 @@ def detect_colored_squares(frame):
 
 
 def process_contours(frame, contours, label, color):
+    global last_red_center, last_blue_center
     for contour in contours:
         area = cv.contourArea(contour)
         if area < MIN_CONTOUR_AREA:
@@ -48,12 +51,27 @@ def process_contours(frame, contours, label, color):
 
         if len(approx) == 4 and cv.isContourConvex(approx):
             x, y, w, h = cv.boundingRect(approx)
-            # Aspect ratio kontrolü: kareler için genişlik ve yükseklik birbirine yakın olmalı
+            # Kare oranını kontrol et
             aspect_ratio = w / float(h)
             if 0.8 <= aspect_ratio <= 1.2:
+                cx = x + w // 2
+                cy = y + h // 2
+
+                if label == "RedSquare":
+                    last_red_center = (cx, cy)
+                elif label == "BlueSquare":
+                    last_blue_center = (cx, cy)
+
                 draw_detected_square(frame, x, y, w, h, label, color)
 
 
 def draw_detected_square(frame, x, y, w, h, label, color):
     cv.rectangle(frame, (x, y), (x + w, y + h), color, 2)
     cv.putText(frame, label, (x, y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+def get_center_red_square():
+    return last_red_center
+
+def get_center_blue_square():
+    return last_blue_center
+
